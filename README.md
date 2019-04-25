@@ -47,6 +47,45 @@ Declaratively. (manifest.json)
   ]
 ```
 
+## Multiple Entry
+ - glob entries plugin 사용
+ - watch 이슈로 webpack-watched-glob-entires-plugin 사용.
+ 
+   https://github.com/Milanzor/webpack-watched-glob-entries-plugin )
+ - entry 디렉토리 경로를 그대로 output으로 사용하려면 glob primer의 @() 을 이용하여 base: '.'로 인지 되도록 처리
+ 
+   https://github.com/isaacs/node-glob, https://www.npmjs.com/package/glob-base
+ 
+설치
+```
+npm install --save-dev webpack-watched-glob-entries-plugin
+```
+
+webpack.config.js
+```
+  entry: WebpackWatchedGlobEntries.getEntries(
+    [ 
+      path.resolve(__dirname + '/src/', 'background.js'),
+      path.resolve(__dirname + '/src/', '@(popup)/*.js'),
+      path.resolve(__dirname + '/src/', '@(content-scripts)/**/*.js'),
+      // path.resolve(__dirname, 'src/**/*.js'),
+    ]
+  ),
+```
+
+output
+```
+               background.js   78.5 KiB       0  [emitted]  background
+  content-scripts/content.js  954 bytes       1  [emitted]  content-scripts/content
+content-scripts/test/test.js  934 bytes       2  [emitted]  content-scripts/test/test
+          icons/icon_128.png   9.81 KiB          [emitted]  
+           icons/icon_48.png   2.52 KiB          [emitted]  
+               manifest.json  551 bytes          [emitted]  
+             popup/popup.css   43 bytes       3  [emitted]  popup/popup
+            popup/popup.html  339 bytes          [emitted]  
+              popup/popup.js    116 KiB       3  [emitted]  popup/popup
+```
+
 
 ## 참고:
 - Content Security Policy (CSP): https://vuejsdevelopers.com/2017/05/08/vue-js-chrome-extension/
